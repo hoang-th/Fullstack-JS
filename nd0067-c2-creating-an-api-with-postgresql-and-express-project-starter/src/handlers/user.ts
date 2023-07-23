@@ -35,8 +35,18 @@ const destroy = async (req: Request, res: Response) => {
     res.json(deleted)
 }
 
+const authenticate = async(req: Request, res: Response) => {
+    try {
+      const authUser = await store.authenticate(req.body.username, req.body.password_digest);
+      res.json(authUser);
+    } catch(err) {
+      res.status(401).json(err)
+   }
+}
+
 const user_routes = (app: express.Application) => {
     app.get('/users', index);
+    app.post("/users/authenticate", authenticate);
     app.get('/users/:id', show);
     app.get('/users', create);
     app.get('/users', destroy);

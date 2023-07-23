@@ -1,6 +1,7 @@
 // @ts-ignore
 import bcrypt from 'bcrypt'
 import dotenv from 'dotenv'
+import Client from '../database';
 
 dotenv.config()
 
@@ -28,6 +29,29 @@ class UserStore {
         } catch (err) {
             throw new Error(`Can not get users ${err}`);
         }
+    }
+
+    async authenticate(username: string, password: string): Promise<User | null> {
+      // @ts-ignore
+      const conn = await Client.connect()
+      const sql = 'SELECT password_digest FROM users WHERE username=($1)'
+  
+      const result = await conn.query(sql, [username])
+  
+      console.log(password+BCRYPT_PASSWORD)
+  
+      if(result.rows.length) {
+  
+        const user = result.rows[0]
+  
+        console.log(user)
+  
+        if (bcrypt.compareSync(password+BCRYPT_PASSWORD, user.password_digest)) {
+          return user
+        }
+      }
+  
+      return null
     }
 
     async show(id: string): Promise<User> {
@@ -104,27 +128,6 @@ class UserStore {
         }
     }
 
-    async authenticate(username: string, password: string): Promise<User | null> {
-      const conn = await Client.connect()
-      const sql = 'SELECT password_digest FROM users WHERE username=($1)'
-  
-      const result = await conn.query(sql, [username])
-  
-      console.log(password+BCRYPT_PASSWORD)
-  
-      if(result.rows.length) {
-  
-        const user = result.rows[0]
-  
-        console.log(user)
-  
-        if (bcrypt.compareSync(password+BCRYPT_PASSWORD, user.password_digest)) {
-          return user
-        }
-      }
-  
-      return null
-    }
 }
 
 module.exports = UserStore;

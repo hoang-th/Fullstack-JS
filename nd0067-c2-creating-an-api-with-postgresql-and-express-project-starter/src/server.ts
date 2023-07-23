@@ -3,6 +3,7 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import { Weapon  } from './models/mythical_weapon'
 import mythicalWeaponRoutes from './handlers/mythical_weapon'
+import userRoutes from './handlers/user'
 
 const app: express.Application = express()
 const address: string = "0.0.0.0:3000"
@@ -65,7 +66,7 @@ app.put('/weapons/:id', (req: Request, res: Response) => {
     }
 })
 
-app.delete('/articles/:id', (_req: Request, res: Response) => {
+app.delete('/weapons/:id', (_req: Request, res: Response) => {
     try {
        res.send('this is the DELETE route')
     } catch (err) {
@@ -74,6 +75,7 @@ app.delete('/articles/:id', (_req: Request, res: Response) => {
     }
 })
 mythicalWeaponRoutes(app)
+userRoutes(app)
 
 app.listen(3000, function () {
     console.log(`starting app on: ${address}`)
