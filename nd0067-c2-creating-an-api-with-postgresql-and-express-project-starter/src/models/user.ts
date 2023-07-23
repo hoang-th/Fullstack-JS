@@ -11,7 +11,7 @@ const {
 } = process.env
 
 type User = {
-    id: Number | null;
+    id?: Number | null;
     username: string;
     password_digest: string;
 
