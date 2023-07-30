@@ -81,14 +81,11 @@ export class UserStore {
         try {
             // @ts-ignore
             const conn = await Client.connect()
-            console.log("1");
             const sql = 'SELECT password_digest FROM users WHERE firstName=($1)'
-            const { rows } = await conn.query(sql, [firstName, lastName])
-            console.log("2")
+            const { rows } = await conn.query(sql, [firstName])
             if(rows.length) {
                 const user = rows[0]
                 if (bcrypt.compareSync(password+BCRYPT_PASSWORD, user.password_digest)) {
-                    console.log("3")
                     return user
                 }
             }
