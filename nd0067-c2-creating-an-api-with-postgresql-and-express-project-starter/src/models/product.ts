@@ -1,5 +1,5 @@
 // @ts-ignore
-import { Client } from "../database";
+import Client from "../database";
 
 export type Product = {
     id?: Number;
@@ -36,17 +36,15 @@ export class ProductStore {
     
     async create(p: Product): Promise<Product> {
         try {
-            console.log("here 1")
             const sql = 'INSERT INTO products (name, price) VALUES($1, $2) RETURNING *'
             // @ts-ignore
             const conn = await Client.connect();
-            console.log("here 2")
             const result = await conn.query(sql, [p.name, p.price]);
-            console.log("here 3")
             const product = result.rows[0];
             conn.release();
             return product;
         } catch (err) {
+            console.log(err)
             throw new Error(`Could not add new product ${p.name}. Error: ${err}`)
         }
     }
@@ -61,6 +59,7 @@ export class ProductStore {
             conn.release()
             return product;
         } catch (err) {
+            console.log(err)
             throw new Error(`Could not delete products ${id}. Error: ${err}`)
         }
     }

@@ -28,7 +28,7 @@ const create = async (req: Request, res: Response) => {
         }
 
         const newUser = await store.create(user);
-        let token = jwt.sign({ user: newUser }, TOKEN_SECRET as string)
+        const token = jwt.sign({ user: newUser }, TOKEN_SECRET as string)
         res.json(token);
     } catch(err) {
         res.status(400)
@@ -38,10 +38,6 @@ const create = async (req: Request, res: Response) => {
 
 const destroy = async (req: Request, res: Response) => {
     const deleted = await store.delete(req.body.id)
-    console.log(`id: ${req.body.id}`)
-    console.log("delete")
-    console.log(deleted)
-    console.log("delete1")
     res.json(deleted)
 }
 
@@ -51,7 +47,7 @@ const authenticate = async(req: Request, res: Response) => {
         res.json(authUser);
     } catch(err) {
         res.status(401).json(err)
-   }
+    }
 }
 
 const userRoutes = (app: express.Application) => {
