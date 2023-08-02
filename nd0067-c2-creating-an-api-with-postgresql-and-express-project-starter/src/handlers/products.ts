@@ -25,10 +25,16 @@ const create = async (req: Request, res: Response) => {
     }
 
     try {
-        jwt.verify(req.body.token, TOKEN_SECRET as string)
-    } catch (err) {
+        console.log(req.headers)
+        const authorizationHeader = req.headers.authorization!
+        console.log(authorizationHeader)
+        const token = authorizationHeader?.split(' ')[1]
+        console.log(token)
+        jwt.verify(token, TOKEN_SECRET as string)
+    } catch(err) {
+        console.log(err)
         res.status(401)
-        res.json(`Invalid token ${err}`)
+        res.json('Access denied, invalid token')
         return
     }
 

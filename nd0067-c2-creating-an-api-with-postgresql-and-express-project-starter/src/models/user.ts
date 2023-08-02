@@ -52,9 +52,7 @@ export class UserStore {
             );
     
             const result = await conn.query(sql, [u.firstName, u.lastName, hash])
-            console.log(`create user ${result}`)
             const user = result.rows[0]
-            console.log(`create user ${user}`)
             conn.release()
             return user
         } catch(err) {
