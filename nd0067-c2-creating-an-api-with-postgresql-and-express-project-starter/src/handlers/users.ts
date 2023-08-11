@@ -22,8 +22,8 @@ const show = async (req: Request, res: Response) => {
 const create = async (req: Request, res: Response) => {
     try {
         const user: User = {
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
+            firstname: req.body.firstname,
+            lastname: req.body.lastname,
             password: req.body.password,
         }
 
@@ -43,7 +43,7 @@ const destroy = async (req: Request, res: Response) => {
 
 const authenticate = async(req: Request, res: Response) => {
     try {
-        const authUser = await store.authenticate(req.body.firstName, req.body.lastName, req.body.password);
+        const authUser = await store.authenticate(req.body.firstname, req.body.lastname, req.body.password);
         res.json(authUser);
     } catch(err) {
         res.status(401).json(err)
@@ -53,7 +53,7 @@ const authenticate = async(req: Request, res: Response) => {
 const userRoutes = (app: express.Application) => {
     app.get('/users', index);
     app.post('/users/authenticate', authenticate);
-    app.get('/users/:id', show);
+    app.get('/users/:id', authenticate, show);
     app.post('/users', create);
     app.delete('/users/:id', destroy);
 }

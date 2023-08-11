@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express'
 import { Product, ProductStore } from '../models/product'
 import jwt from 'jsonwebtoken'
+import { verifyAuthToken } from './verifyAuthToken'
 
 const store = new ProductStore()
 
@@ -25,20 +26,6 @@ const create = async (req: Request, res: Response) => {
     }
 
     try {
-        console.log(req.headers)
-        const authorizationHeader = req.headers.authorization!
-        console.log(authorizationHeader)
-        const token = authorizationHeader?.split(' ')[1]
-        console.log(token)
-        jwt.verify(token, TOKEN_SECRET as string)
-    } catch(err) {
-        console.log(err)
-        res.status(401)
-        res.json('Access denied, invalid token')
-        return
-    }
-
-    try {
         const newProduct = await store.create(product)
         res.json(newProduct)
     } catch(err) {
@@ -55,8 +42,8 @@ const destroy = async (req: Request, res: Response) => {
 const productRoutes = (app: express.Application) => {
     app.get('/products', index)
     app.get('/products/:id', show)
-    app.post('/products', create)
-    app.delete('/products/:id', destroy)
+    app.post('/products', verifyAuthToken, create)
+    app.delete('/products/:id', verifyAuthToken, destroy)
 }
 
 export default productRoutes

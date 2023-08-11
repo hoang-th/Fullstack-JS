@@ -8,8 +8,8 @@ const {
 
 export type User = {
     id?: Number;
-    firstName: string;
-    lastName: string;
+    firstname: string;
+    lastname: string;
     password: string;
 }
 
@@ -51,12 +51,12 @@ export class UserStore {
                 parseInt(SALT_ROUNDS as string)
             );
     
-            const result = await conn.query(sql, [u.firstName, u.lastName, hash])
+            const result = await conn.query(sql, [u.firstname, u.lastname, hash])
             const user = result.rows[0]
             conn.release()
             return user
         } catch(err) {
-            throw new Error(`Could not create user ${u.firstName} ${u.lastName}. Error: ${err}`)
+            throw new Error(`Could not create user ${u.firstname} ${u.lastname}. Error: ${err}`)
         } 
     }
 
@@ -75,12 +75,12 @@ export class UserStore {
         }
     }
 
-    async authenticate(firstName: string, lastName: string, password: string): Promise<User | null> {
+    async authenticate(firstname: string, lastname: string, password: string): Promise<User | null> {
         try {
             // @ts-ignore
             const conn = await Client.connect()
             const sql = 'SELECT password_digest FROM users WHERE firstName=($1)'
-            const { rows } = await conn.query(sql, [firstName])
+            const { rows } = await conn.query(sql, [firstname])
             if(rows.length) {
                 const user = rows[0]
                 if (bcrypt.compareSync(password+BCRYPT_PASSWORD, user.password_digest)) {
@@ -89,7 +89,7 @@ export class UserStore {
             }
             return null;
         } catch (err) {
-            throw new Error(`Could not delete user ${firstName} ${lastName}. Error: ${err}`)
+            throw new Error(`Could not delete user ${firstname} ${lastname}. Error: ${err}`)
         }
     }
 }
