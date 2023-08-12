@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express'
 import { User, UserStore } from '../models/user'
 import jwt from 'jsonwebtoken'
+import { verifyAuthToken } from './verifyAuthToken'
 import dotenv  from 'dotenv'
 
 const store = new UserStore();
@@ -10,13 +11,23 @@ const {
 } = process.env
 
 const index = async (_req: Request, res: Response) => {
-    const users = await store.index();
-    res.json(users);
+    try {
+        const users = await store.index();
+        res.json(users);
+    } catch (err) {
+        res.status(400);
+        res.json(err);
+    }
 }
 
 const show = async (req: Request, res: Response) => {
-    const user = await store.show(req.params.id);
-    res.json(user);
+    try {
+        const user = await store.show(req.params.id);
+        res.json(user);
+    } catch (err) {
+        res.status(400);
+        res.json(err);
+    }
 }
 
 const create = async (req: Request, res: Response) => {
@@ -37,7 +48,7 @@ const create = async (req: Request, res: Response) => {
 }
 
 const destroy = async (req: Request, res: Response) => {
-    const deleted = await store.delete(req.body.id)
+    const deleted = await store.delete(req.params.id)
     res.json(deleted)
 }
 
@@ -51,11 +62,11 @@ const authenticate = async(req: Request, res: Response) => {
 }
 
 const userRoutes = (app: express.Application) => {
-    app.get('/users', index);
+    app.get('/users', verifyAuthToken, index);
     app.post('/users/authenticate', authenticate);
-    app.get('/users/:id', authenticate, show);
+    app.get('/users/:id', verifyAuthToken, show);
     app.post('/users', create);
-    app.delete('/users/:id', destroy);
+    app.delete('/users/:id', verifyAuthToken, destroy);
 }
 
 export default userRoutes;

@@ -5,12 +5,24 @@ const verifyAuthToken_1 = require("./verifyAuthToken");
 const store = new order_1.OrderStore();
 const { TOKEN_SECRET, } = process.env;
 const index = async (_req, res) => {
-    const orders = await store.index();
-    res.json(orders);
+    try {
+        const orders = await store.index();
+        res.json(orders);
+    }
+    catch (err) {
+        res.status(400);
+        res.json(err);
+    }
 };
 const show = async (req, res) => {
-    const order = await store.show(req.params.id);
-    res.json(order);
+    try {
+        const order = await store.show(req.params.id);
+        res.json(order);
+    }
+    catch (err) {
+        res.status(400);
+        res.json(err);
+    }
 };
 const create = async (req, res) => {
     const order = {

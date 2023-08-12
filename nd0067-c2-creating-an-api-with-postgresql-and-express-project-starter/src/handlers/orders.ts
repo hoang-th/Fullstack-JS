@@ -9,13 +9,23 @@ const {
 } = process.env
 
 const index = async (_req: Request, res: Response) => {
-    const orders = await store.index()
-    res.json(orders)
+    try {
+        const orders = await store.index()
+        res.json(orders)
+    } catch (err) {
+        res.status(400);
+        res.json(err);
+    }
 }
 
 const show = async (req: Request, res: Response) => {
-    const order = await store.show(req.params.id)
-    res.json(order)
+    try {
+        const order = await store.show(req.params.id)
+        res.json(order)
+    } catch (err) {
+        res.status(400);
+        res.json(err);
+    }
 }
 
 const create = async (req: Request, res: Response) => {

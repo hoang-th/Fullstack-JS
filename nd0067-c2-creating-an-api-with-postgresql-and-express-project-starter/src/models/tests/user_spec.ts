@@ -21,8 +21,8 @@ describe("User Model", () => {
 
 	it('should have a authenticate method', () => {
 		expect(store.authenticate).toBeDefined();
-	  });
-  
+	});
+
     it('create method should add a user', async () => {
         const result = await store.create({
             firstname: 'Alexa',
@@ -49,7 +49,7 @@ describe("User Model", () => {
     });
   
     it('delete method should remove the user', async () => {
-        store.delete("2");
+        await store.delete("2");
         const result = await store.index()
         expect(result).toEqual([]);
     });

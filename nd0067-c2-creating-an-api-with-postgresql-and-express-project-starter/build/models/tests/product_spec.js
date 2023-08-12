@@ -43,7 +43,7 @@ describe("Product Model", () => {
         });
     });
     it('delete method should remove the product', async () => {
-        store.delete("2");
+        await store.delete("2");
         const result = await store.index();
         expect(result).toEqual([]);
     });

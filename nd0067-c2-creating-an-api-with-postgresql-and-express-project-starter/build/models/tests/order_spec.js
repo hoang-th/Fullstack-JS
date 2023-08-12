@@ -26,7 +26,7 @@ describe("Order Model", () => {
     });
     afterAll(async () => {
         await productStore.delete("1");
-        await userStore.delete("1");
+        await userStore.delete(`${user_id}`);
     });
     it('should have an index method', () => {
         expect(orderStore.index).toBeDefined();
@@ -45,12 +45,12 @@ describe("Order Model", () => {
     });
     it('create method should add a order', async () => {
         const result = await orderStore.create({
-            user_id: 1,
+            user_id: user_id,
             status: "active"
         });
         expect(result).toEqual({
             id: 1,
-            user_id: 1,
+            user_id: user_id,
             status: "active"
         });
     });
@@ -68,6 +68,15 @@ describe("Order Model", () => {
             id: 1,
             user_id: 1,
             status: "active"
+        });
+    });
+    it('add Product method should return the correct order product', async () => {
+        const result = await orderStore.addProduct(10, "1", "1");
+        expect(result).toEqual({
+            id: 1,
+            quantity: 10,
+            order_id: 1,
+            product_id: 1
         });
     });
     it('delete method should remove the product', async () => {
