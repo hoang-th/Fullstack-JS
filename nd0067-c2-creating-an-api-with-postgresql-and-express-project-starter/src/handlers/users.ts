@@ -2,7 +2,6 @@ import express, { Request, Response } from 'express'
 import { User, UserStore } from '../models/user'
 import jwt from 'jsonwebtoken'
 import { verifyAuthToken } from './verifyAuthToken'
-import dotenv  from 'dotenv'
 
 const store = new UserStore();
 
@@ -48,8 +47,12 @@ const create = async (req: Request, res: Response) => {
 }
 
 const destroy = async (req: Request, res: Response) => {
-    const deleted = await store.delete(req.params.id)
-    res.json(deleted)
+    try {
+        const deleted = await store.delete(req.params.id)
+        res.json(deleted)
+    } catch(err) {
+        res.status(400).json(err)
+    }
 }
 
 const authenticate = async(req: Request, res: Response) => {

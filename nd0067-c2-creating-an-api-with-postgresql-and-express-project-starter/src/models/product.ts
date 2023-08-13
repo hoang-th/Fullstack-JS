@@ -44,7 +44,6 @@ export class ProductStore {
             conn.release();
             return product;
         } catch (err) {
-            console.log(err)
             throw new Error(`Could not add new product ${p.name}. Error: ${err}`)
         }
     }
@@ -59,7 +58,6 @@ export class ProductStore {
             conn.release()
             return product;
         } catch (err) {
-            console.log(err)
             throw new Error(`Could not delete products ${id}. Error: ${err}`)
         }
     }

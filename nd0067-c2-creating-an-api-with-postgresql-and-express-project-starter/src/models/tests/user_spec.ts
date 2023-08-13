@@ -3,20 +3,21 @@ import { User, UserStore } from "../user";
 const store = new UserStore()
 
 describe("User Model", () => {
+    let userId: number;
     it('should have an index method', () => {
-      expect(store.index).toBeDefined();
+        expect(store.index).toBeDefined();
     });
   
     it('should have a show method', () => {
-      expect(store.show).toBeDefined();
+        expect(store.show).toBeDefined();
     });
   
     it('should have a create method', () => {
-      expect(store.create).toBeDefined();
+        expect(store.create).toBeDefined();
     });
   
     it('should have a delete method', () => {
-      expect(store.delete).toBeDefined();
+        expect(store.delete).toBeDefined();
     });
 
 	it('should have a authenticate method', () => {
@@ -29,6 +30,7 @@ describe("User Model", () => {
             lastname: 'David',
             password: 'password123'
         });
+        userId = result.id as number;
         expect(result.firstname).toEqual('Alexa');
         expect(result.lastname).toEqual('David');
     });
@@ -39,7 +41,7 @@ describe("User Model", () => {
     });
   
     it('show method should return the correct user', async () => {
-        const result = await store.show("2");
+        const result = await store.show(`${userId}`);
         expect(result).not.toBeNull();
     });
 
@@ -49,7 +51,7 @@ describe("User Model", () => {
     });
   
     it('delete method should remove the user', async () => {
-        await store.delete("2");
+        await store.delete(`${userId}`);
         const result = await store.index()
         expect(result).toEqual([]);
     });

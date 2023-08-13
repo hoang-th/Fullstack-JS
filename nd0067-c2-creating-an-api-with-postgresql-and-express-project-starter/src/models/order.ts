@@ -44,7 +44,6 @@ export class OrderStore {
             conn.release();
             return order;
         } catch (err) {
-            console.log(err)
             throw new Error(`Could not add new order for user ID: ${o.user_id}. Error: ${err}`)
         }
     }

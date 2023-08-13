@@ -1,6 +1,5 @@
 import express, { Request, Response } from 'express'
 import { Product, ProductStore } from '../models/product'
-import jwt from 'jsonwebtoken'
 import { verifyAuthToken } from './verifyAuthToken'
 
 const store = new ProductStore()
@@ -45,8 +44,12 @@ const create = async (req: Request, res: Response) => {
 }
 
 const destroy = async (req: Request, res: Response) => {
-    const deleted = await store.delete(req.body.id)
-    res.json(deleted)
+    try {
+        const deleted = await store.delete(req.params.id)
+        res.json(deleted)
+    } catch(err) {
+        res.status(400).json(err)
+    }
 }
 
 const productRoutes = (app: express.Application) => {

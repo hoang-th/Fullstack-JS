@@ -7,7 +7,7 @@ const userStore = new UserStore()
 const productStore = new ProductStore()
 
 describe("Order Model", () => {
-    let user_id: number, product_id: number;
+    let user_id: number, product_id: number, order_id: number;
     beforeAll(async () => {
         const product = await productStore.create({
             name: 'rocket',
@@ -21,15 +21,13 @@ describe("Order Model", () => {
             password: 'password123'
         })
         user_id = user.id as number;
-        console.log(`product_id: ${product_id}`)
-        console.log(typeof(user_id))
-        console.log(`user_id: ${user_id}`)
     })
 
     afterAll(async () => {
-        await productStore.delete("1");
+        await productStore.delete(`${product_id}`);
         await userStore.delete(`${user_id}`);
     })
+
     it('should have an index method', () => {
         expect(orderStore.index).toBeDefined();
     });
@@ -55,44 +53,44 @@ describe("Order Model", () => {
             user_id: user_id,
             status: "active"
         });
+        order_id = result.id as number;
         expect(result).toEqual({
-            id: 1,
+            id: order_id,
             user_id: user_id,
             status: "active"
         });
-
     });
   
     it('index method should return a list of products', async () => {
         const result = await orderStore.index();
         expect(result).toEqual([{
-            id: 1,
-            user_id: 1,
+            id: order_id,
+            user_id: user_id,
             status: "active"
         }]);
     });
   
     it('show method should return the correct product', async () => {
-        const result = await orderStore.show("1");
+        const result = await orderStore.show(`${order_id}`);
         expect(result).toEqual({
-            id: 1,
-            user_id: 1,
+            id: order_id,
+            user_id: user_id,
             status: "active"
         });
     });
 
     it('add Product method should return the correct order product', async () => {
-        const result = await orderStore.addProduct(10, "1", "1");
+        const result = await orderStore.addProduct(10, `${order_id}`, `${product_id}`);
         expect(result).toEqual({
-            id: 1,
+            id: result.id,
             quantity: 10,
-            order_id: 1,
-            product_id: 1
+            order_id: order_id,
+            product_id: product_id
         });
     });
 
     it('delete method should remove the product', async () => {
-        orderStore.delete("1");
+        orderStore.delete(`${order_id}`);
         const result = await orderStore.index()
         expect(result).toEqual([]);
     });
