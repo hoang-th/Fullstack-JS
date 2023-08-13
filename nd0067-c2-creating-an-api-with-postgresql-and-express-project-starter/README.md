@@ -23,15 +23,15 @@
 
 Add the specifications below to an env file:
 
-POSTGRES_HOST=127.0.0.1
-POSTGRES_DB=shopping
-POSTGRES_TEST_DB=shopping_test
-POSTGRES_USER=shopping_user
-POSTGRES_PASSWORD=password123
-ENV=dev
-BCRYPT_PASSWORD=your-secret-password
-SALT_ROUNDS=10
-TOKEN_SECRET=abcxyz123
+- POSTGRES_HOST=127.0.0.1
+- POSTGRES_DB=shopping
+- POSTGRES_TEST_DB=shopping_test
+- POSTGRES_USER=shopping_user
+- POSTGRES_PASSWORD=password123
+- ENV=dev
+- BCRYPT_PASSWORD=your-secret-password
+- SALT_ROUNDS=10
+- TOKEN_SECRET=abcxyz123
 
 ### Running Ports 
 After start up, the server will start on port `3000` and the database on port `5432`
